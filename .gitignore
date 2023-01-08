@@ -1,0 +1,7 @@
+# IDE:
+/.idea/
+
+# CSharp:
+*.DotSettings.user
+obj/
+bin/
