@@ -5,3 +5,6 @@
 *.DotSettings.user
 obj/
 bin/
+
+# Project:
+/Timberborn/
