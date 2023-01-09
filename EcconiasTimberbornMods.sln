@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyboardControls", "KeyboardControls\KeyboardControls.csproj", "{CE7379E1-8239-4769-81B0-2842B5469E37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnhancedControls", "EnhancedControls\EnhancedControls.csproj", "{CE7379E1-8239-4769-81B0-2842B5469E37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
