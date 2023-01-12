@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace />
+        <LangVersion>11</LangVersion>
+    </PropertyGroup>
+
+    <!-- BepInEx default dependencies: -->
+    <ItemGroup>
+        <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+        <PackageReference Include="BepInEx.Core" Version="5.*" />
+        <!-- Disabled, as it is malfunctional. It does not assign the right and sensible data to the right field (specifically UUID is just wrong) -->
+        <!-- <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" /> -->
+        <PackageReference Include="UnityEngine.Modules" Version="2022.1.24" IncludeAssets="compile" />
+    </ItemGroup>
+
+    <!-- BepInEx whatever thing: Probably does not apply, as this is netstandard 2.1 -->
+    <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+        <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+    </ItemGroup>
+    
+    <!-- References to the Timberborn DLLs: -->
+    <ItemGroup>
+      <Reference Include="Timberborn.CameraSystem">
+        <HintPath>..\Timberborn\Timberborn.CameraSystem.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>
