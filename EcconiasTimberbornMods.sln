@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnhancedControls", "Enhance
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FixNearPlane", "FixNearPlane\FixNearPlane.csproj", "{9C3E5165-41B9-497C-B775-E4570B0D7B88}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopyStorageFilter", "CopyStorageFilter\CopyStorageFilter.csproj", "{2F97ABD6-54C0-438F-BC39-CDE745F334C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{9C3E5165-41B9-497C-B775-E4570B0D7B88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C3E5165-41B9-497C-B775-E4570B0D7B88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C3E5165-41B9-497C-B775-E4570B0D7B88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F97ABD6-54C0-438F-BC39-CDE745F334C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F97ABD6-54C0-438F-BC39-CDE745F334C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F97ABD6-54C0-438F-BC39-CDE745F334C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F97ABD6-54C0-438F-BC39-CDE745F334C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
