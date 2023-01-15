@@ -1,15 +1,36 @@
 using BepInEx;
+using BepInEx.Logging;
+using EnhancedControls.DynamicKeybindings;
+using EnhancedControls.KeybindingPatcher;
+using EnhancedControls.Tests;
+using HarmonyLib;
+using UnityEngine.InputSystem;
 
 namespace EnhancedControls
 {
-	[BepInPlugin("de.ecconia.timberborn.keyboardcontrols", "Keyboard Controls", "1.0.0")]
+	[BepInPlugin("ecconia.timberborn.enhancedcontrols", "Enhanced Controls", "1.0.0")]
 	public class Plugin : BaseUnityPlugin
 	{
+		public static ManualLogSource? logger;
+		public static Harmony harmony;
+
 		private void Awake()
 		{
-			Logger.LogInfo("Plugin Keyboard Controls is starting!");
-			
-			Logger.LogInfo("Plugin Keyboard Controls is loaded!");
+			logger = Logger;
+			print("Plugin Enhanced Controls is starting!");
+
+			harmony = new Harmony("ecconia.timberborn.enhancedcontrols");
+			StaticSpeed.init(harmony);
+			InputServiceHijacker.showStockpileOverlay = new CheckKeyHeld(Key.K);
+			InputServiceHijacker.changeGameSpeed = new SpeedCycler(new CheckKeyDown(Key.Tab));
+			InputServiceHijacker.init(harmony);
+
+			print("Plugin Enhanced Controls is loaded!");
+		}
+
+		public static void print(string message)
+		{
+			logger!.LogMessage(message);
 		}
 	}
 }
