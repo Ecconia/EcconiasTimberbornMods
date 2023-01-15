@@ -17,13 +17,17 @@ namespace CopyStorageFilter
 			{
 				throw new Exception("Report to dev: Could not find property 'SelectionStart' in class 'InputService'. Plugin will not be functional.");
 			}
-			harmony.Patch(property.GetMethod, new HarmonyMethod(hook));
+			harmony.Patch(property.GetMethod, null, new HarmonyMethod(hook));
 		}
 
-		public static bool keybindingFixer(ref bool __result, InputService __instance, MouseController ____mouse)
+		public static void keybindingFixer(ref bool __result, InputService __instance, MouseController ____mouse)
 		{
-			__result = !__instance.IsShiftHeld && ____mouse.IsButtonDown(MouseButton.Left);
-			return false;
+			//In case that another plugin tries to overwrite this, it will kind of work, as this is now postfix...
+			// But as soon as other plugins try to mess with keybindings, things might turn out funny.
+			if(__instance.IsShiftHeld)
+			{
+				__result = false;
+			}
 		}
 	}
 }
