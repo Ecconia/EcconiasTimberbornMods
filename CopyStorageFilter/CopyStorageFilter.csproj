@@ -27,6 +27,9 @@
         <Reference Include="Bindito.Core">
             <HintPath>..\Timberborn\Bindito.Core.dll</HintPath>
         </Reference>
+        <Reference Include="Timberborn.BaseComponentSystem">
+          <HintPath>..\Timberborn\Timberborn.BaseComponentSystem.dll</HintPath>
+        </Reference>
         <Reference Include="Timberborn.InputSystem">
             <HintPath>..\Timberborn\Timberborn.InputSystem.dll</HintPath>
         </Reference>

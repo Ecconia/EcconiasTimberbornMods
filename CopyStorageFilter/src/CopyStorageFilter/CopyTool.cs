@@ -1,4 +1,5 @@
 using System.Reflection;
+using Timberborn.BaseComponentSystem;
 using Timberborn.InputSystem;
 using Timberborn.InventorySystem;
 using Timberborn.SelectionSystem;
@@ -48,20 +49,20 @@ namespace CopyStorageFilter
 				return false;
 			}
 
-			raycaster.TryHitSelectableObject(out GameObject hitGameObject);
+			raycaster.TryHitSelectableObject(out BaseComponent hitGameObject);
 			if(hitGameObject == null)
 			{
 				//Not looking at an object? Reject:
 				return false;
 			}
 
-			var stockpile = hitGameObject.GetComponent<Stockpile>();
+			var stockpile = hitGameObject.GameObjectFast.GetComponent<Stockpile>();
 			if(stockpile == null)
 			{
 				//The building must be of stockpile type:
 				return false;
 			}
-			var singleGoodAllower = hitGameObject.GetComponent<SingleGoodAllower>();
+			var singleGoodAllower = hitGameObject.GameObjectFast.GetComponent<SingleGoodAllower>();
 			if(singleGoodAllower == null)
 			{
 				//The inventory type must be "single good allower":
