@@ -1,100 +1,97 @@
-using System.Reflection;
 using Timberborn.BaseComponentSystem;
 using Timberborn.InputSystem;
 using Timberborn.InventorySystem;
 using Timberborn.SelectionSystem;
 using Timberborn.Stockpiles;
-using UnityEngine;
 
 namespace CopyStorageFilter
 {
-	//The tool that is not an actual game 'Tool' (class).
-	public class CopyTool : MonoBehaviour, IInputProcessor
+	public class CopyTool
 	{
-		//Instance fields:
+		public static CopyTool instance;
+		
 		private readonly SelectableObjectRaycaster raycaster;
 		private readonly InputService inputService;
-		private readonly MouseController mc;
-
-		//Data fields:
-		private string type = "";
-		private string? good;
-
+		
 		public CopyTool(InputService inputService, SelectableObjectRaycaster raycaster)
 		{
-			//Save services to fields:
+			instance = this;
 			this.inputService = inputService;
 			this.raycaster = raycaster;
-			//Get the value of the mouse controller from the input service:
-			var tmp = inputService.GetType().GetField("_mouse", BindingFlags.Instance | BindingFlags.NonPublic);
-			if(tmp == null)
-			{
-				throw new Exception("Complain to the dev: The 'InputService' class does not contain a private field '_mouse'. Whoops mod won't be functional!");
-			}
-			mc = (MouseController) tmp.GetValue(inputService);
-			if(mc == null)
-			{
-				throw new Exception("Complain to the dev: The 'InputService's field '_mouse' has no value. Whoops mod won't be functional!");
-			}
-			//Receive input events from the input system:
-			InputForwarder.instantiate(inputService, this);
 		}
-
-		public bool ProcessInput()
+		
+		public void triggerCopyPaste(out bool consume)
 		{
-			bool isLeft = mc.IsButtonUpAfterShortHold(MouseButton.Left);
-			if(!inputService.IsShiftHeld || !(isLeft || mc.IsButtonUpAfterShortHold(MouseButton.Right)))
+			consume = false;
+			if (inputService.MouseOverUI)
 			{
-				//Shift + Left/Right has to be pressed, else reject:
-				return false;
+				//Nothing to do, when mouse is over UI. Need to be able to select a building or so.
+				return;
 			}
-
+			
+			var isRight = inputService.IsKeyDown(CursorToolHook.rightButton);
+			var isLeft = inputService.IsKeyDown(CursorToolHook.leftButton);
+			if (isRight == isLeft)
+			{
+				//Left or right must be pressed for this tool to function. None or both is not supported. 
+				return;
+			}
+			
+			attemptCopyPasteAction(isRight, out bool successful);
+			consume = successful;
+		}
+		
+		private void attemptCopyPasteAction(bool isPaste, out bool successful)
+		{
+			successful = false;
+			
 			raycaster.TryHitSelectableObject(out BaseComponent hitGameObject);
-			if(hitGameObject == null)
+			if (hitGameObject == null)
 			{
-				//Not looking at an object? Reject:
-				return false;
+				//Not looking at an object? Reject.
+				return;
 			}
-
-			var stockpile = hitGameObject.GameObjectFast.GetComponent<Stockpile>();
-			if(stockpile == null)
+			var gameObject = hitGameObject.GameObjectFast;
+			var stockpile = gameObject.GetComponent<Stockpile>();
+			var singleGoodAllower = gameObject.GetComponent<SingleGoodAllower>();
+			if (stockpile == null || singleGoodAllower == null)
 			{
-				//The building must be of stockpile type:
-				return false;
+				//The inventory type must be "single good allower".
+				//The building must be of stockpile type.
+				return;
 			}
-			var singleGoodAllower = hitGameObject.GameObjectFast.GetComponent<SingleGoodAllower>();
-			if(singleGoodAllower == null)
-			{
-				//The inventory type must be "single good allower":
-				return false;
-			}
-
+			successful = true;
+			
+			performCopyPasteAction(singleGoodAllower, stockpile, isPaste);
+		}
+		
+		private readonly Dictionary<string, string> copiedFilters = new Dictionary<string, string>();
+		
+		private void performCopyPasteAction(SingleGoodAllower singleGoodAllower, Stockpile stockpile, bool isPaste)
+		{
 			//At this point, always consume input.
-			if(isLeft)
+			if (isPaste)
 			{
-				//Paste setting:
-				if(!type.Equals(stockpile.WhitelistedGoodType))
+				//Get setting:
+				if (copiedFilters.TryGetValue(stockpile.WhitelistedGoodType, out string filter))
 				{
-					//The type is not equal to what was last copied, so stop here.
-					return true;
+					//Paste setting:
+					if (filter == null)
+					{
+						singleGoodAllower.Disallow();
+					}
+					else
+					{
+						singleGoodAllower.Allow(filter);
+					}
 				}
-				if(good == null)
-				{
-					singleGoodAllower.Disallow();
-				}
-				else
-				{
-					singleGoodAllower.Allow(good);
-				}
+				//else Nothing copied of that type so far... (so do nothing).
 			}
 			else
 			{
 				//Copy setting:
-				type = stockpile.WhitelistedGoodType;
-				good = singleGoodAllower.AllowedGood;
+				copiedFilters[stockpile.WhitelistedGoodType] = singleGoodAllower.AllowedGood;
 			}
-			//True means, consumed.
-			return true;
 		}
 	}
 }
