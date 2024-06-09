@@ -6,7 +6,7 @@ using Timberborn.SelectionSystem;
 
 namespace CopyStorageFilter
 {
-	[BepInPlugin("ecconia.timberborn.copystoragefilter", "Copy Storage Filter", "2.0.0")]
+	[BepInPlugin("ecconia.timberborn.copystoragefilter", "Copy Storage Filter", "2.0.1")]
 	public class Plugin : BaseUnityPlugin
 	{
 		private void Awake()

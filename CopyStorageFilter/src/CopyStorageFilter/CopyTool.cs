@@ -37,7 +37,7 @@ namespace CopyStorageFilter
 				return;
 			}
 			
-			attemptCopyPasteAction(isRight, out bool successful);
+			attemptCopyPasteAction(isLeft, out bool successful);
 			consume = successful;
 		}
 		
