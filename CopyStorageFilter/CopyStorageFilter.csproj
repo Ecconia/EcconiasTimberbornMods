@@ -37,6 +37,9 @@
 		<Reference Include="Timberborn.InventorySystem">
 			<HintPath>..\Timberborn\Timberborn.InventorySystem.dll</HintPath>
 		</Reference>
+		<Reference Include="Timberborn.ModManagerScene">
+		  <HintPath>..\Timberborn\Timberborn.ModManagerScene.dll</HintPath>
+		</Reference>
 		<Reference Include="Timberborn.SelectionSystem">
 			<HintPath>..\Timberborn\Timberborn.SelectionSystem.dll</HintPath>
 		</Reference>
