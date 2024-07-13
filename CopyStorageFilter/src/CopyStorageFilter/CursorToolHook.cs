@@ -13,27 +13,26 @@ namespace CopyStorageFilter
 		
 		public static void init(Harmony harmony)
 		{
-			var field = typeof(InputService).GetField("MouseLeftKey", BindingFlags.Static | BindingFlags.NonPublic);
-			if (field == null)
-			{
-				throw new Exception("Could not find field \"MouseLeftKey\" in \"InputService\"");
-			}
+			var field = typeof(InputService).GetField(nameof(InputService.MouseLeftKey), BindingFlags.Static | BindingFlags.NonPublic);
+			checkNotNull(field, "Could not find field \"MouseLeftKey\" in \"InputService\"");
 			leftButton = (string) field.GetValue(null);
 			
-			field = typeof(InputService).GetField("MouseRightKey", BindingFlags.Static | BindingFlags.NonPublic);
-			if (field == null)
-			{
-				throw new Exception("Could not find field \"MouseRightKey\" in \"InputService\"");
-			}
+			field = typeof(InputService).GetField(nameof(InputService.MouseRightKey), BindingFlags.Static | BindingFlags.NonPublic);
+			checkNotNull(field, "Could not find field \"MouseRightKey\" in \"InputService\"");
 			rightButton = (string) field.GetValue(null);
 			
-			var stuff = typeof(CursorTool).GetMethod("ProcessSelectObject", BindingFlags.NonPublic | BindingFlags.Instance);
-			if (stuff == null)
-			{
-				throw new Exception("Could not find method \"ProcessSelectObject\" in \"CursorTool\"");
-			}
+			var stuff = typeof(CursorTool).GetMethod(nameof(CursorTool.ProcessSelectObject), BindingFlags.NonPublic | BindingFlags.Instance);
+			checkNotNull(stuff, "Could not find method \"ProcessSelectObject\" in \"CursorTool\"");
 			var hook = typeof(CursorToolHook).GetMethod(nameof(cursorToolSelectHook), BindingFlags.Public | BindingFlags.Static);
 			harmony.Patch(stuff, new HarmonyMethod(hook));
+		}
+		
+		private static void checkNotNull(object value, string message)
+		{
+			if (value == null)
+			{
+				throw new Exception(message);
+			}
 		}
 		
 		public static bool cursorToolSelectHook(ref bool __result)
