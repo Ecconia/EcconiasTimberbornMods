@@ -10,18 +10,16 @@
 	
 	<!-- BepInEx default dependencies: -->
 	<ItemGroup>
+		<!-- Might be useful? Hopefully this finds issues. -->
 		<PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all"/>
-		<PackageReference Include="BepInEx.Core" Version="5.*"/>
-		<!-- Disabled, as it is malfunctional. It does not assign the right and sensible data to the right field (specifically UUID is just wrong) -->
-		<!-- <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" /> -->
+		<!-- Will prevent the requirement to manually reference Unity DLLs -->
 		<PackageReference Include="UnityEngine.Modules" Version="2022.1.24" IncludeAssets="compile"/>
+		<!-- Allows to access private/internal things in certain game DLLs -->
 		<PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2" PrivateAssets="all" />
+		<!-- Reference for the latest Harmony version. Provided by the Harmony mod. -->
+		<PackageReference Include="Lib.Harmony" Version="2.3.3" />
 	</ItemGroup>
 	
-	<!-- BepInEx whatever thing: Probably does not apply, as this is netstandard 2.1 -->
-	<ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
-		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all"/>
-	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="Bindito.Core">
 			<HintPath>..\Timberborn\Bindito.Core.dll</HintPath>

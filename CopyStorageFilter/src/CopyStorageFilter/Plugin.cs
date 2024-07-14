@@ -8,7 +8,7 @@ namespace CopyStorageFilter
 	{
 		public void StartMod()
 		{
-			var harmony = new Harmony("ecconia.timberborn.copystoragefilter");
+			var harmony = new Harmony("Mod:CopyStorageFilter");
 			
 			//Setup all the reflection/harmony stuff for the CursorTool hooks: 
 			CursorToolHook.init(harmony);
