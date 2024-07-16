@@ -1,14 +1,27 @@
 using Timberborn.BaseComponentSystem;
+using Timberborn.Gathering;
+using Timberborn.Goods;
 using Timberborn.InputSystem;
 using Timberborn.InventorySystem;
+using Timberborn.Planting;
 using Timberborn.SelectionSystem;
 using Timberborn.Stockpiles;
+using Timberborn.WaterBuildings;
+using Timberborn.Workshops;
+using Timberborn.Yielding;
+using UnityEngine;
 
 namespace CopyStorageFilter
 {
 	public class CopyTool
 	{
 		public static CopyTool instance;
+		
+		private readonly Dictionary<string, string> copiedFilters = new();
+		private readonly Dictionary<int, RecipeSpecification> copiedRecipes = new();
+		private readonly Dictionary<string, Plantable> copiedPlantables = new();
+		private readonly Dictionary<string, Gatherable> copiedGatherables = new();
+		private (bool clean, bool contamined) copiedWaterTypeProperty = (true, true);
 		
 		private readonly SelectableObjectRaycaster raycaster;
 		private readonly InputService inputService;
@@ -52,30 +65,45 @@ namespace CopyStorageFilter
 				return;
 			}
 			var gameObject = hitGameObject.GameObjectFast;
+			
+			successful = tryStockpile(gameObject, isPaste)
+				|| tryManufacturer(gameObject, isPaste)
+				|| tryPlanter(gameObject, isPaste)
+				|| tryWaterMover(gameObject, isPaste)
+				|| tryGatherer(gameObject, isPaste);
+			
+			// if (!successful)
+			// {
+			// 	debugObject(gameObject);
+			// }
+		}
+		
+		// private void debugObject(GameObject obj)
+		// {
+		// 	var sb = new StringBuilder();
+		// 	sb.Append("Debugging clicked object: '").Append(obj.name).AppendLine("'");
+		// 	foreach(var component in obj.GetComponents<Component>())
+		// 	{
+		// 		sb.Append("- ").AppendLine(component.GetType().Name);
+		// 	}
+		// 	Debug.Log(sb);
+		// }
+		
+		private bool tryStockpile(GameObject gameObject, bool isPaste)
+		{
 			var stockpile = gameObject.GetComponent<Stockpile>();
 			var singleGoodAllower = gameObject.GetComponent<SingleGoodAllower>();
 			if (stockpile == null || singleGoodAllower == null)
 			{
 				//The inventory type must be "single good allower".
 				//The building must be of stockpile type.
-				return;
+				return false;
 			}
-			successful = true;
 			
-			performCopyPasteAction(singleGoodAllower, stockpile, isPaste);
-		}
-		
-		private readonly Dictionary<string, string> copiedFilters = new Dictionary<string, string>();
-		
-		private void performCopyPasteAction(SingleGoodAllower singleGoodAllower, Stockpile stockpile, bool isPaste)
-		{
-			//At this point, always consume input.
 			if (isPaste)
 			{
-				//Get setting:
 				if (copiedFilters.TryGetValue(stockpile.WhitelistedGoodType, out string filter))
 				{
-					//Paste setting:
 					if (filter == null)
 					{
 						singleGoodAllower.Disallow();
@@ -85,13 +113,112 @@ namespace CopyStorageFilter
 						singleGoodAllower.Allow(filter);
 					}
 				}
-				//else Nothing copied of that type so far... (so do nothing).
 			}
-			else
+			else //isCopy
 			{
-				//Copy setting:
 				copiedFilters[stockpile.WhitelistedGoodType] = singleGoodAllower.AllowedGood;
 			}
+			
+			return true;
+		}
+		
+		private bool tryManufacturer(GameObject gameObject, bool isPaste)
+		{
+			var manufacturer = gameObject.GetComponent<Manufactory>();
+			if (manufacturer == null)
+			{
+				return false;
+			}
+			
+			var recipesHash = hash(manufacturer.ProductionRecipes);
+			if (isPaste)
+			{
+				if (copiedRecipes.TryGetValue(recipesHash, out RecipeSpecification recipe))
+				{
+					manufacturer.SetRecipe(recipe);
+				}
+			}
+			else //isCopy
+			{
+				copiedRecipes[recipesHash] = manufacturer.CurrentRecipe;
+			}
+			
+			return true;
+			
+			int hash(IEnumerable<RecipeSpecification> values) => values
+				.Select(e => e.Id)
+				.Aggregate(19, (current, value) => current * 31 + value.GetHashCode());
+		}
+		
+		private bool tryPlanter(GameObject gameObject, bool isPaste)
+		{
+			var planterBuilding = gameObject.GetComponent<PlanterBuilding>();
+			var planterPriority = gameObject.GetComponent<PlantablePrioritizer>();
+			if (planterBuilding == null ||  planterPriority == null)
+			{
+				return false;
+			}
+			
+			var key = planterBuilding.PlantableResourceGroup;
+			if (isPaste)
+			{
+				if (copiedPlantables.TryGetValue(key, out Plantable plantable))
+				{
+					//Paste setting:
+					planterPriority.PrioritizePlantable(plantable);
+				}
+			}
+			else //isCopy
+			{
+				copiedPlantables[key] = planterPriority.PrioritizedPlantable;
+			}
+			
+			return true;
+		}
+		
+		private bool tryWaterMover(GameObject gameObject, bool isPaste)
+		{
+			var waterMover = gameObject.GetComponent<WaterMover>();
+			if (waterMover == null)
+			{
+				return false;
+			}
+			
+			if (isPaste)
+			{
+				(waterMover.CleanWaterMovement, waterMover.ContaminatedWaterMovement) = copiedWaterTypeProperty;
+			}
+			else //isCopy
+			{
+				copiedWaterTypeProperty = (waterMover.CleanWaterMovement, waterMover.ContaminatedWaterMovement);
+			}
+			
+			return true;
+		}
+		
+		private bool tryGatherer(GameObject gameObject, bool isPaste)
+		{
+			var building = gameObject.GetComponent<YieldRemovingBuilding>();
+			var prioritizer = gameObject.GetComponent<GatherablePrioritizer>();
+			if (building == null || prioritizer == null)
+			{
+				return false;
+			}
+			
+			var key = building.ResourceGroup;
+			if (isPaste)
+			{
+				if (copiedGatherables.TryGetValue(key, out Gatherable gatherable))
+				{
+					prioritizer.PrioritizeGatherable(gatherable);
+				}
+			}
+			else //isCopy
+			{
+				copiedGatherables[key] = prioritizer.PrioritizedGatherable;
+			}
+			
+			return true;
 		}
 	}
 }

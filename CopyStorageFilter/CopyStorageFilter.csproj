@@ -24,11 +24,23 @@
 		<Reference Include="Bindito.Core">
 			<HintPath>..\Timberborn\Bindito.Core.dll</HintPath>
 		</Reference>
+		<Reference Include="System.Collections.Immutable">
+		  <HintPath>..\Timberborn\System.Collections.Immutable.dll</HintPath>
+		</Reference>
+		<Reference Include="System.Collections.Immutable">
+		  <HintPath>..\Timberborn\System.Collections.Immutable.dll</HintPath>
+		</Reference>
 		<Reference Include="Timberborn.BaseComponentSystem">
 			<HintPath>..\Timberborn\Timberborn.BaseComponentSystem.dll</HintPath>
 		</Reference>
 		<Reference Include="Timberborn.CursorToolSystem" Publicize="true">
 			<HintPath>..\Timberborn\Timberborn.CursorToolSystem.dll</HintPath>
+		</Reference>
+		<Reference Include="Timberborn.Gathering">
+		  <HintPath>..\Timberborn\Timberborn.Gathering.dll</HintPath>
+		</Reference>
+		<Reference Include="Timberborn.Goods">
+		  <HintPath>..\Timberborn\Timberborn.Goods.dll</HintPath>
 		</Reference>
 		<Reference Include="Timberborn.InputSystem" Publicize="true">
 			<HintPath>..\Timberborn\Timberborn.InputSystem.dll</HintPath>
@@ -39,14 +51,29 @@
 		<Reference Include="Timberborn.ModManagerScene">
 		  <HintPath>..\Timberborn\Timberborn.ModManagerScene.dll</HintPath>
 		</Reference>
+		<Reference Include="Timberborn.Planting">
+		  <HintPath>..\Timberborn\Timberborn.Planting.dll</HintPath>
+		</Reference>
 		<Reference Include="Timberborn.SelectionSystem">
 			<HintPath>..\Timberborn\Timberborn.SelectionSystem.dll</HintPath>
 		</Reference>
 		<Reference Include="Timberborn.Stockpiles">
 			<HintPath>..\Timberborn\Timberborn.Stockpiles.dll</HintPath>
 		</Reference>
+		<Reference Include="Timberborn.TickSystem">
+		  <HintPath>..\Timberborn\Timberborn.TickSystem.dll</HintPath>
+		</Reference>
 		<Reference Include="Timberborn.ToolSystem">
 		  <HintPath>..\Timberborn\Timberborn.ToolSystem.dll</HintPath>
+		</Reference>
+		<Reference Include="Timberborn.WaterBuildings">
+		  <HintPath>..\Timberborn\Timberborn.WaterBuildings.dll</HintPath>
+		</Reference>
+		<Reference Include="Timberborn.Workshops">
+		  <HintPath>..\Timberborn\Timberborn.Workshops.dll</HintPath>
+		</Reference>
+		<Reference Include="Timberborn.Yielding">
+		  <HintPath>..\Timberborn\Timberborn.Yielding.dll</HintPath>
 		</Reference>
 		<Reference Include="Unity.InputSystem">
 			<HintPath>..\Timberborn\Unity.InputSystem.dll</HintPath>

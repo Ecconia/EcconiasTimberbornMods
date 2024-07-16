@@ -1,9 +1,9 @@
 {
   "Name": "Copy Storage Filter",
-  "Version": "2.1.1",
+  "Version": "2.2.0",
   "Id": "CopyStorageFilter",
   "MinimumGameVersion": "0.6.0.0",
-  "Description": "Copy Storage Filter allows to easily copy storage filters with left/right mouse buttons while holding Shift. Just like in Factorio.",
+  "Description": "Copy Storage Filter allows to easily copy storage filters and more with left/right mouse buttons while holding Shift. Just like in Factorio.",
   "RequiredMods": [
     {
       "Id": "Harmony",
