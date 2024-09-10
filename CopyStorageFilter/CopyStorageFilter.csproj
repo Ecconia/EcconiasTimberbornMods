@@ -72,7 +72,7 @@
 		<Reference Include="Timberborn.Workshops">
 		  <HintPath>..\Timberborn\Timberborn.Workshops.dll</HintPath>
 		</Reference>
-		<Reference Include="Timberborn.Yielding">
+		<Reference Include="Timberborn.Yielding" Publicize="true">
 		  <HintPath>..\Timberborn\Timberborn.Yielding.dll</HintPath>
 		</Reference>
 		<Reference Include="Unity.InputSystem">

@@ -153,13 +153,14 @@ namespace CopyStorageFilter
 		private bool tryPlanter(GameObject gameObject, bool isPaste)
 		{
 			var planterBuilding = gameObject.GetComponent<PlanterBuilding>();
+			var planterBuildingSpecs = gameObject.GetComponent<PlanterBuildingSpec>();
 			var planterPriority = gameObject.GetComponent<PlantablePrioritizer>();
-			if (planterBuilding == null ||  planterPriority == null)
+			if (planterBuilding == null || planterBuildingSpecs == null || planterPriority == null)
 			{
 				return false;
 			}
 			
-			var key = planterBuilding.PlantableResourceGroup;
+			var key = planterBuildingSpecs.PlantableResourceGroup;
 			if (isPaste)
 			{
 				if (copiedPlantables.TryGetValue(key, out Plantable plantable))
@@ -205,7 +206,7 @@ namespace CopyStorageFilter
 				return false;
 			}
 			
-			var key = building.ResourceGroup;
+			var key = building._yieldRemovingBuildingSpec.ResourceGroup;
 			if (isPaste)
 			{
 				if (copiedGatherables.TryGetValue(key, out Gatherable gatherable))
