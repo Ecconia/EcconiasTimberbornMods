@@ -5,15 +5,13 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<RootNamespace/>
-		<LangVersion>11</LangVersion>
+		<LangVersion>latestmajor</LangVersion>
 	</PropertyGroup>
 	
 	<!-- BepInEx default dependencies: -->
 	<ItemGroup>
 		<!-- Might be useful? Hopefully this finds issues. -->
 		<PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all"/>
-		<!-- Will prevent the requirement to manually reference Unity DLLs -->
-		<PackageReference Include="UnityEngine.Modules" Version="2022.1.24" IncludeAssets="compile"/>
 		<!-- Allows to access private/internal things in certain game DLLs -->
 		<PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2" PrivateAssets="all" />
 		<!-- Reference for the latest Harmony version. Provided by the Harmony mod. -->
@@ -77,6 +75,9 @@
 		</Reference>
 		<Reference Include="Unity.InputSystem">
 			<HintPath>..\Timberborn\Unity.InputSystem.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.CoreModule">
+			<HintPath>..\Timberborn\UnityEngine.CoreModule.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 

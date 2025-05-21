@@ -1,6 +1,5 @@
 using Timberborn.BaseComponentSystem;
 using Timberborn.Gathering;
-using Timberborn.Goods;
 using Timberborn.InputSystem;
 using Timberborn.InventorySystem;
 using Timberborn.Planting;
@@ -18,9 +17,9 @@ namespace CopyStorageFilter
 		public static CopyTool instance;
 		
 		private readonly Dictionary<string, string> copiedFilters = new();
-		private readonly Dictionary<int, RecipeSpecification> copiedRecipes = new();
-		private readonly Dictionary<string, Plantable> copiedPlantables = new();
-		private readonly Dictionary<string, Gatherable> copiedGatherables = new();
+		private readonly Dictionary<int, RecipeSpec> copiedRecipes = new();
+		private readonly Dictionary<string, PlantableSpec> copiedPlantables = new();
+		private readonly Dictionary<string, GatherableSpec> copiedGatherables = new();
 		private (bool clean, bool contamined) copiedWaterTypeProperty = (true, true);
 		
 		private readonly SelectableObjectRaycaster raycaster;
@@ -133,7 +132,7 @@ namespace CopyStorageFilter
 			var recipesHash = hash(manufacturer.ProductionRecipes);
 			if (isPaste)
 			{
-				if (copiedRecipes.TryGetValue(recipesHash, out RecipeSpecification recipe))
+				if (copiedRecipes.TryGetValue(recipesHash, out RecipeSpec recipe))
 				{
 					manufacturer.SetRecipe(recipe);
 				}
@@ -145,7 +144,7 @@ namespace CopyStorageFilter
 			
 			return true;
 			
-			int hash(IEnumerable<RecipeSpecification> values) => values
+			int hash(IEnumerable<RecipeSpec> values) => values
 				.Select(e => e.Id)
 				.Aggregate(19, (current, value) => current * 31 + value.GetHashCode());
 		}
@@ -163,7 +162,7 @@ namespace CopyStorageFilter
 			var key = planterBuildingSpecs.PlantableResourceGroup;
 			if (isPaste)
 			{
-				if (copiedPlantables.TryGetValue(key, out Plantable plantable))
+				if (copiedPlantables.TryGetValue(key, out var plantable))
 				{
 					//Paste setting:
 					planterPriority.PrioritizePlantable(plantable);
@@ -171,7 +170,7 @@ namespace CopyStorageFilter
 			}
 			else //isCopy
 			{
-				copiedPlantables[key] = planterPriority.PrioritizedPlantable;
+				copiedPlantables[key] = planterPriority.PrioritizedPlantableSpec;
 			}
 			
 			return true;
@@ -209,7 +208,7 @@ namespace CopyStorageFilter
 			var key = building._yieldRemovingBuildingSpec.ResourceGroup;
 			if (isPaste)
 			{
-				if (copiedGatherables.TryGetValue(key, out Gatherable gatherable))
+				if (copiedGatherables.TryGetValue(key, out var gatherable))
 				{
 					prioritizer.PrioritizeGatherable(gatherable);
 				}
