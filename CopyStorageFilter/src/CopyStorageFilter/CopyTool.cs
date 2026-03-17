@@ -8,7 +8,6 @@ using Timberborn.Stockpiles;
 using Timberborn.WaterBuildings;
 using Timberborn.Workshops;
 using Timberborn.Yielding;
-using UnityEngine;
 
 namespace CopyStorageFilter
 {
@@ -57,38 +56,38 @@ namespace CopyStorageFilter
 		{
 			successful = false;
 			
-			raycaster.TryHitSelectableObject(out BaseComponent hitGameObject);
+			raycaster.TryHitSelectableObject(out var hitGameObject);
 			if (hitGameObject == null)
 			{
 				//Not looking at an object? Reject.
 				return;
 			}
-			var gameObject = hitGameObject.GameObjectFast;
 			
-			successful = tryStockpile(gameObject, isPaste)
-				|| tryManufacturer(gameObject, isPaste)
-				|| tryPlanter(gameObject, isPaste)
-				|| tryWaterMover(gameObject, isPaste)
-				|| tryGatherer(gameObject, isPaste);
+			successful = tryStockpile(hitGameObject, isPaste)
+				|| tryManufacturer(hitGameObject, isPaste)
+				|| tryPlanter(hitGameObject, isPaste)
+				|| tryWaterMover(hitGameObject, isPaste)
+				|| tryGatherer(hitGameObject, isPaste);
 			
 			// if (!successful)
 			// {
-			// 	debugObject(gameObject);
+			// 	debugObject(hitGameObject);
 			// }
 		}
 		
-		// private void debugObject(GameObject obj)
+		// Broken, as the newer Caching system does not expose ALL components.
+		// private static void debugObject(BaseComponent obj)
 		// {
-		// 	var sb = new StringBuilder();
-		// 	sb.Append("Debugging clicked object: '").Append(obj.name).AppendLine("'");
-		// 	foreach(var component in obj.GetComponents<Component>())
+		// 	var sb = new System.Text.StringBuilder();
+		// 	sb.Append("Debugging clicked object: '").Append(obj.Name).AppendLine("'");
+		// 	foreach(var component in obj.GetComponentsAllocating<Component>())
 		// 	{
 		// 		sb.Append("- ").AppendLine(component.GetType().Name);
 		// 	}
 		// 	Debug.Log(sb);
 		// }
 		
-		private bool tryStockpile(GameObject gameObject, bool isPaste)
+		private bool tryStockpile(BaseComponent gameObject, bool isPaste)
 		{
 			var stockpile = gameObject.GetComponent<Stockpile>();
 			var singleGoodAllower = gameObject.GetComponent<SingleGoodAllower>();
@@ -121,7 +120,7 @@ namespace CopyStorageFilter
 			return true;
 		}
 		
-		private bool tryManufacturer(GameObject gameObject, bool isPaste)
+		private bool tryManufacturer(BaseComponent gameObject, bool isPaste)
 		{
 			var manufacturer = gameObject.GetComponent<Manufactory>();
 			if (manufacturer == null)
@@ -149,7 +148,7 @@ namespace CopyStorageFilter
 				.Aggregate(19, (current, value) => current * 31 + value.GetHashCode());
 		}
 		
-		private bool tryPlanter(GameObject gameObject, bool isPaste)
+		private bool tryPlanter(BaseComponent gameObject, bool isPaste)
 		{
 			var planterBuilding = gameObject.GetComponent<PlanterBuilding>();
 			var planterBuildingSpecs = gameObject.GetComponent<PlanterBuildingSpec>();
@@ -176,7 +175,7 @@ namespace CopyStorageFilter
 			return true;
 		}
 		
-		private bool tryWaterMover(GameObject gameObject, bool isPaste)
+		private bool tryWaterMover(BaseComponent gameObject, bool isPaste)
 		{
 			var waterMover = gameObject.GetComponent<WaterMover>();
 			if (waterMover == null)
@@ -196,7 +195,7 @@ namespace CopyStorageFilter
 			return true;
 		}
 		
-		private bool tryGatherer(GameObject gameObject, bool isPaste)
+		private bool tryGatherer(BaseComponent gameObject, bool isPaste)
 		{
 			var building = gameObject.GetComponent<YieldRemovingBuilding>();
 			var prioritizer = gameObject.GetComponent<GatherablePrioritizer>();

@@ -15,7 +15,7 @@
 		<!-- Allows to access private/internal things in certain game DLLs -->
 		<PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.2" PrivateAssets="all" />
 		<!-- Reference for the latest Harmony version. Provided by the Harmony mod. -->
-		<PackageReference Include="Lib.Harmony" Version="2.3.3" />
+		<PackageReference Include="Lib.Harmony" Version="2.4.1" />
 	</ItemGroup>
 	
 	<ItemGroup>

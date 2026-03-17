@@ -6,7 +6,7 @@ namespace CopyStorageFilter
 {
 	public class Plugin : IModStarter
 	{
-		public void StartMod()
+		public void StartMod(IModEnvironment modEnvironment)
 		{
 			var harmony = new Harmony("Mod:CopyStorageFilter");
 			
